@@ -15,7 +15,7 @@ public interface PurchaseService {
 	
 	public Purchase getPurchase(int tranNo) throws Exception;
 	
-	public Map<String, Object> getPurchaseList(Search search, String ?) throws Exception;
+	public Map<String, Object> getPurchaseList(Search search, String x) throws Exception;
 	
 	public Map<String, Object> getSaleList(Search search) throws Exception;
 	

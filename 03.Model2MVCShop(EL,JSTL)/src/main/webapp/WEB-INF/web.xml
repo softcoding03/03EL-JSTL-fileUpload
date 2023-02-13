@@ -5,7 +5,9 @@
 					xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" 
 					 version="3.0"
 					 metadata-complete="true">
-
+	<session-config>
+   	 <session-timeout>60</session-timeout>
+	</session-config>	
 	<!-- 게시판 Page 하단 Page 번호 개수 예)  이전 1 2 3 4 5  이후 -->
 	<context-param>
 		<param-name>pageUnit</param-name>

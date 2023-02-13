@@ -10,9 +10,9 @@ public class Purchase {
 	
 	private User buyer;
 	private Product purchaseProd;
-	private String divyAddr;
-	private String divyDate;
-	private String divyRequest;
+	private String dlvyAddr;
+	private String dlvyDate;
+	private String dlvyRequest;
 	private String orderDate; //Date -> String으로 변경했음
 	private String paymentOption;
 	private String receiverName;
@@ -29,23 +29,23 @@ public class Purchase {
 	public void setBuyer(User buyer) {
 		this.buyer = buyer;
 	}
-	public String getDivyAddr() {
-		return divyAddr;
+	public String getDlvyAddr() {
+		return dlvyAddr;
 	}
-	public void setDivyAddr(String divyAddr) {
-		this.divyAddr = divyAddr;
+	public void setDlvyAddr(String dlvyAddr) {
+		this.dlvyAddr = dlvyAddr;
 	}
-	public String getDivyDate() {
-		return divyDate;
+	public String getDlvyDate() {
+		return dlvyDate;
 	}
-	public void setDivyDate(String divyDate) {
-		this.divyDate = divyDate;
+	public void setDlvyDate(String dlvyDate) {
+		this.dlvyDate = dlvyDate;
 	}
-	public String getDivyRequest() {
-		return divyRequest;
+	public String getDlvyRequest() {
+		return dlvyRequest;
 	}
-	public void setDivyRequest(String divyRequest) {
-		this.divyRequest = divyRequest;
+	public void setDlvyRequest(String dlvyRequest) {
+		this.dlvyRequest = dlvyRequest;
 	}
 	public String getOrderDate() {
 		return orderDate;
@@ -92,8 +92,8 @@ public class Purchase {
 	
 	@Override
 	public String toString() {
-		return "PurchaseVO [buyer=" + buyer + ", divyAddr=" + divyAddr
-				+ ", divyDate=" + divyDate + ", divyRequest=" + divyRequest
+		return "PurchaseVO [buyer=" + buyer + ", dlvyAddr=" + dlvyAddr
+				+ ", dlvyDate=" + dlvyDate + ", dlvyRequest=" + dlvyRequest
 				+ ", orderDate=" + orderDate + ", paymentOption="
 				+ paymentOption + ", purchaseProd=" + purchaseProd
 				+ ", receiverName=" + receiverName + ", receiverPhone="

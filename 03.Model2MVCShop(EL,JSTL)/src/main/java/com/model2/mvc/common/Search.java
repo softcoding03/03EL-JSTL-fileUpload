@@ -24,6 +24,7 @@ public class Search {
 	public int getCurrentPage() {
 		return curruntPage;
 	}
+	
 	public void setCurrentPage(int curruntPage) {
 		this.curruntPage = curruntPage;
 	}

@@ -21,6 +21,7 @@ public class LoginAction extends Action{
 		
 		UserService userService=new UserServiceImpl();
 		User dbUser=userService.loginUser(user);
+		System.out.println("userId´Â ???" +dbUser.getUserId());
 		
 		HttpSession session=request.getSession();
 		session.setAttribute("user", dbUser);
