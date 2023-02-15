@@ -54,7 +54,7 @@ public class PurchaseDao {
 			
 			purchase.setReceiverPhone(rs.getString("Receiver_Phone"));
 			purchase.setReceiverName(rs.getString("Receiver_Name"));
-			purchase.setPaymentOption(rs.getString("Payment_Option"));
+			purchase.setPaymentOption(rs.getString("Payment_Option").trim());
 			purchase.setOrderDate(rs.getString("Order_Date"));
 			purchase.setDlvyRequest(rs.getString("Dlvy_Request"));
 			purchase.setDlvyDate(rs.getString("Dlvy_Date")); 
@@ -63,7 +63,7 @@ public class PurchaseDao {
 			purchase.setPurchaseProd(new ProductServiceImpl().getProduct(rs.getInt("prod_no"))); 
 			purchase.setBuyer(new UserServiceImpl().getUser(rs.getString("buyer_id")));
 		}
-		
+		rs.close();
 		con.close();
 
 		return purchase;
@@ -118,7 +118,6 @@ public class PurchaseDao {
 		
 		String sql = "select * from transaction where buyer_Id ='"+ userId+"'";
 		
-		
 		sql += " order by tran_no";     
 		
 		System.out.println("PurchaseDAO :: Original SQL :: " + sql);
@@ -126,21 +125,20 @@ public class PurchaseDao {
 		int totalCount = this.getTotalCount(sql); //ProductDao.getTotalCount 실행 -> 레코드 총 row 수 반환
 		System.out.println("PurchaseDAO :: totalCount :: " + totalCount);
 		
-		//==> CurrentPage 게시물만 받도록 Query 다시구성(모든데이터 가져올 필요 없기 때문에)
+		//==> CurrentPage 게시물만 받도록 Query 다시구성(모든데이터 가져올 필요 없기 때문에) ROWNUM
 		sql = makeCurrentPageSql(sql, search); //ProductDao.makeCurrentPageSql 실행
 		
 		PreparedStatement stmt = con.prepareStatement(sql);
-		//TYPE_SCROLL_INSENSITIVE = rs.next()은 다음 row를 가져오고 이전의 데이터로 돌아가진 못한다. 커서가 지나간 자리에도 다시 돌아갈 수 있게 만들어줌.
-		//CONCUR_UPDATABLE result로 가져온 값을 updateable 할 수 있다.
+
 		ResultSet rs = stmt.executeQuery();
 
 		System.out.println(search);
 		
 		List<Purchase> list = new ArrayList<Purchase>();
-		Purchase purchase = new Purchase();
+	
 		while(rs.next()){
 				
-				
+				Purchase purchase = new Purchase();
 				purchase.setDlvyAddr(rs.getString("Dlvy_Addr"));
 				purchase.setDlvyDate(rs.getString("dlvy_date"));
 				purchase.setDlvyRequest(rs.getString("dlvy_request"));
@@ -148,12 +146,13 @@ public class PurchaseDao {
 				purchase.setPaymentOption(rs.getString("Payment_Option"));
 				purchase.setReceiverName(rs.getString("Receiver_Name"));
 				purchase.setReceiverPhone(rs.getString("Receiver_Phone"));
-				purchase.setTranCode(rs.getString("tran_status_code"));
+				purchase.setTranCode(rs.getString("tran_status_code").trim());
 				purchase.setTranNo(rs.getInt("tran_no"));
+				purchase.setPurchaseProd(new ProductServiceImpl().getProduct(rs.getInt("prod_no"))); 
+				purchase.setBuyer(new UserServiceImpl().getUser(rs.getString("buyer_id")));
 				list.add(purchase);  //list에, select해온 정보들을 저장한 vo를 담는다.
 		}
 		
-		System.out.println("trancode는 ???"+purchase.getTranCode());
 		//==> totalCount 정보 저장
 		map.put("totalCount", new Integer(totalCount));
 		//==> currentPage 의 게시물 정보 갖는 List 저장
@@ -166,7 +165,89 @@ public class PurchaseDao {
 		return map; //totalCount와 'list'(select해온 vo 정보들을 담은 list) 
 	}
 	
+
+	//구매정보수정을 위한
+	public void updatePurchase(Purchase purchase) throws Exception {
+		//browser에서 상품정보수정 값들 입력받은 것 세팅해놓은 productVO를 인자로 받음
+		Connection con = DBUtil.getConnection();
+		
+		String sql = "update TRANSACTION set payment_option=?,receiver_name=?,receiver_phone=?,dlvy_addr=?,dlvy_request=?,dlvy_date=? where tran_NO=?";
+		
+		PreparedStatement stmt = con.prepareStatement(sql);
+		stmt.setString(1, purchase.getPaymentOption());
+		stmt.setString(2, purchase.getReceiverName());
+		stmt.setString(3, purchase.getReceiverPhone());
+		stmt.setString(4, purchase.getDlvyAddr());
+		stmt.setString(5, purchase.getDlvyRequest());
+		stmt.setString(6, purchase.getDlvyDate());
+		stmt.setInt(7, purchase.getTranNo());
+		stmt.executeUpdate();
+		
+		System.out.println("update 쿼리 날리기 완료 !");
+		
+		stmt.close();
+		con.close();
+	}
 	
+
+	//구매상태 코드수정을 위한
+	public void updateTranCode(Purchase purchase) throws Exception {
+		//browser에서 상품정보수정 값들 입력받은 것 세팅해놓은 productVO를 인자로 받음
+		Connection con = DBUtil.getConnection();
+		
+		String sql = "update PRODUCT set PROD_NAME=?,PROD_DETAIL=?,MANUFACTURE_DAY=to_char(to_date(?,'yyyy-mm-dd'),'yyyymmdd'),price=?,IMAGE_FILE=? where PROD_NO=?";
+		
+		PreparedStatement stmt = con.prepareStatement(sql);
+		stmt.setString(1, productVO.getProdName());
+		stmt.setString(2, productVO.getProdDetail());
+		stmt.setString(3, productVO.getManuDate());
+		stmt.setInt(4, productVO.getPrice());
+		stmt.setString(5, productVO.getFileName());
+		stmt.setInt(6, productVO.getProdNo());
+		stmt.executeUpdate();
+		
+		System.out.println("update 쿼리 날리기 완료 !");
+		
+		stmt.close();
+		con.close();
+	}
+	
+	
+	
+	private int getTotalCount(String sql) throws Exception {
+		
+		sql = "SELECT COUNT(*) "+
+		          "FROM ( " +sql+ ") countTable";
+		
+		Connection con = DBUtil.getConnection();
+		PreparedStatement pStmt = con.prepareStatement(sql);
+		ResultSet rs = pStmt.executeQuery();
+		
+		int totalCount = 0;
+		if( rs.next() ){
+			totalCount = rs.getInt(1);// 첫 열의 int ?
+		}
+		
+		pStmt.close();
+		con.close();
+		rs.close();
+		
+		return totalCount; //레코드 row 수 반환
+	}
+	
+	// 게시판 currentPage Row 만  return 
+	private String makeCurrentPageSql(String sql , Search search){
+		sql = 	"SELECT * "+ 
+					"FROM (SELECT inner_table. * , ROWNUM AS row_seq" +
+							" FROM ("+sql+") inner_table"+
+							" WHERE ROWNUM <="+search.getCurrentPage()*search.getPageSize()+" ) " +
+					"WHERE row_seq BETWEEN "+((search.getCurrentPage()-1)*search.getPageSize()+1) +" AND "+search.getCurrentPage()*search.getPageSize();
+		
+		System.out.println("purchaseDAO :: make SQL :: "+ sql);	
+		
+		return sql;
+	}
+	/*
 	//판매목록보기를 위한(Admin입장)
 	public Map<String,Object> getSaleList(Search search) throws Exception {
 		
@@ -219,86 +300,5 @@ public class PurchaseDao {
 			
 		return map; //totalCount와 'list'(select해온 vo 정보들을 담은 list) 
 	}
-
-	//구매정보수정을 위한
-	public void updatePurchase(Purchase purchase) throws Exception {
-		//browser에서 상품정보수정 값들 입력받은 것 세팅해놓은 productVO를 인자로 받음
-		Connection con = DBUtil.getConnection();
-		
-		String sql = "update TRANSACTION set payment_option=?,receiver_name=?,receiver_phone=?,dlvy_addr=?,dlvy_request=?,dlvy_date=? where tran_NO=?";
-		
-		PreparedStatement stmt = con.prepareStatement(sql);
-		stmt.setString(1, purchase.getPaymentOption());
-		stmt.setString(2, purchase.getReceiverName());
-		stmt.setString(3, purchase.getReceiverPhone());
-		stmt.setString(4, purchase.getDlvyAddr());
-		stmt.setString(5, purchase.getDlvyRequest());
-		stmt.setString(6, purchase.getDlvyDate());
-		stmt.setInt(7, purchase.getTranNo());
-		stmt.executeUpdate();
-		
-		System.out.println("update 쿼리 날리기 완료 !");
-		
-		stmt.close();
-		con.close();
-	}
-	
-
-	//구매상태 코드수정을 위한
-	public void updateTranCode(Purchase purchase) throws Exception {
-		//browser에서 상품정보수정 값들 입력받은 것 세팅해놓은 productVO를 인자로 받음
-		Connection con = DBUtil.getConnection();
-		
-		String sql = "update PRODUCT set PROD_NAME=?,PROD_DETAIL=?,MANUFACTURE_DAY=to_char(to_date(?,'yyyy-mm-dd'),'yyyymmdd'),price=?,IMAGE_FILE=? where PROD_NO=?";
-		
-		PreparedStatement stmt = con.prepareStatement(sql);
-		stmt.setString(1, productVO.getProdName());
-		stmt.setString(2, productVO.getProdDetail());
-		stmt.setString(3, productVO.getManuDate());
-		stmt.setInt(4, productVO.getPrice());
-		stmt.setString(5, productVO.getFileName());
-		stmt.setInt(6, productVO.getProdNo());
-		stmt.executeUpdate();
-		
-		System.out.println("update 쿼리 날리기 완료 !");
-		
-		con.close();
-	}
-	
-	
-	
-	private int getTotalCount(String sql) throws Exception {
-		
-		sql = "SELECT COUNT(*) "+
-		          "FROM ( " +sql+ ") countTable";
-		
-		Connection con = DBUtil.getConnection();
-		PreparedStatement pStmt = con.prepareStatement(sql);
-		ResultSet rs = pStmt.executeQuery();
-		
-		int totalCount = 0;
-		if( rs.next() ){
-			totalCount = rs.getInt(1);// 첫 열의 int ?
-		}
-		
-		pStmt.close();
-		con.close();
-		rs.close();
-		
-		return totalCount; //레코드 row 수 반환
-	}
-	
-	// 게시판 currentPage Row 만  return 
-	private String makeCurrentPageSql(String sql , Search search){
-		sql = 	"SELECT * "+ 
-					"FROM (SELECT inner_table. * , ROWNUM AS row_seq" +
-							" FROM ("+sql+") inner_table"+
-							" WHERE ROWNUM <="+search.getCurrentPage()*search.getPageSize()+" ) " +
-					"WHERE row_seq BETWEEN "+((search.getCurrentPage()-1)*search.getPageSize()+1) +" AND "+search.getCurrentPage()*search.getPageSize();
-		
-		System.out.println("purchaseDAO :: make SQL :: "+ sql);	
-		
-		return sql;
-	}
-	
+*/
 }

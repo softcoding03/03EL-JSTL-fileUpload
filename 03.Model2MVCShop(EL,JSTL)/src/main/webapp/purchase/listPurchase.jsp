@@ -80,17 +80,18 @@
 			<td></td>
 			<td align="left">
 			현재	
-			<c:if test="${purchase.tranCode=='1'}">
-				구매완료 상태
-			</c:if>
+			<c:set var="b" value="${purchase.tranCode}" />
+				<c:if test="${b=='1'}">
+						구매완료 상태
+				</c:if>
 			
-			<c:if test="${purchase.tranCode=='2'}">
-				배송중 상태
-			</c:if>
+				<c:if test="${b=='2'}">
+						배송중 상태
+				</c:if>
 			
-			<c:if test="${purchase.tranCode=='3'}">
-				배송완료 상태
-			</c:if> 
+				<c:if test="${b=='3'}">
+						배송완료 상태
+				</c:if> 
 			 입니다.
 		</td>
 		</tr>

@@ -159,7 +159,21 @@
 			<td></td>
 			<td align="left">${product.regDate}</td>		
 			<td></td>
-			<td align="left">재고 없음</td>	
+			<td align="left">
+			<c:if test="${empty tranCode}">
+				판매중
+			</c:if>
+			<c:if test="${tranCode == '1'}">
+				구매완료  <a href="/updateTranCodeByProd.do?prodNo=${product.prodNo}&tranCode=${tranCode}">배송하기</a>
+			</c:if>
+			<c:if test="${tranCode == '2'}">
+				배송중
+			</c:if>
+			<c:if test="${tranCode == '3'}">
+				배송완료
+			</c:if>
+			
+			</td>	
 		</tr>
 		<tr>
 		<td colspan="11" bgcolor="D6D7D6" height="1"></td>

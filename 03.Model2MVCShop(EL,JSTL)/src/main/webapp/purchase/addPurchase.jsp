@@ -25,7 +25,13 @@
 	<tr>
 		<td>구매방법</td>
 		<td>
-		${purchase.paymentOption }
+		<c:set var="a" value="${purchase.paymentOption}" />
+			<c:if test="${a=='1'}">
+						현금구매
+			</c:if>
+			<c:if test="${a=='2'}">
+						신용구매
+			</c:if>
 		</td>
 		<td></td>
 	</tr>

@@ -23,7 +23,7 @@ public String execute(HttpServletRequest request, HttpServletResponse response) 
 		
 		request.setAttribute("purchase", purchase);
 
-
+		System.out.println("paymentOption¿∫ ...? = "+purchase.getPaymentOption());
 		
 		return "forward:/purchase/getPurchase.jsp";
 	}

@@ -33,8 +33,8 @@ public class PurchaseServiceImpl implements PurchaseService{
 	}
 
 	
-	public Map<String, Object> getPurchaseList(Search search, String x) throws Exception {
-		return purchaseDao.getPurchaseList(search, x);
+	public Map<String, Object> getPurchaseList(Search search, String userId) throws Exception {
+		return purchaseDao.getPurchaseList(search, userId);
 	}
 
 	

@@ -67,10 +67,17 @@
 	</tr>
 
 	<tr>
+	
 		<td width="104" class="ct_write">구매방법</td>
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
-					${purchase.paymentOption}
+		<c:set var="a" value="${purchase.paymentOption}"/>
+				<c:if test="${a=='1'}">
+						현금구매
+				</c:if>
+				<c:if test="${a=='2'}">
+						신용구매
+				</c:if>
 		</td>
 	</tr>
 	<tr>

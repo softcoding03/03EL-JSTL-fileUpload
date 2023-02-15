@@ -47,6 +47,7 @@ public String execute(HttpServletRequest request,HttpServletResponse response) t
 		//현재 페이지 정보들을 가지고 Page bean을 세팅한다 ...
 		
 		System.out.println("ListUserAction ::"+resultPage);
+		System.out.println("나는야 list이다 !!!!"+map.get("list2"));
 		
 		request.setAttribute("list3", map.get("list2")); // `select해온 정보들은 담은 vo들을 list 배열에 넣은 list`
 		request.setAttribute("resultPage", resultPage); //현재 페이지 정보
