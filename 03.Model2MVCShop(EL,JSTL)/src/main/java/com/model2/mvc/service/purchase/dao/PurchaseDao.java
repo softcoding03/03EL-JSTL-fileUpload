@@ -192,18 +192,16 @@ public class PurchaseDao {
 
 	//구매상태 코드수정을 위한
 	public void updateTranCode(Purchase purchase) throws Exception {
-		//browser에서 상품정보수정 값들 입력받은 것 세팅해놓은 productVO를 인자로 받음
 		Connection con = DBUtil.getConnection();
 		
-		String sql = "update PRODUCT set PROD_NAME=?,PROD_DETAIL=?,MANUFACTURE_DAY=to_char(to_date(?,'yyyy-mm-dd'),'yyyymmdd'),price=?,IMAGE_FILE=? where PROD_NO=?";
+		String sql = "update Transaction set tran_status_code=? where tran_NO=?";
+		//tranCode String , tranNo int 세팅되어있음
 		
 		PreparedStatement stmt = con.prepareStatement(sql);
-		stmt.setString(1, productVO.getProdName());
-		stmt.setString(2, productVO.getProdDetail());
-		stmt.setString(3, productVO.getManuDate());
-		stmt.setInt(4, productVO.getPrice());
-		stmt.setString(5, productVO.getFileName());
-		stmt.setInt(6, productVO.getProdNo());
+		
+		stmt.setString(1, purchase.getTranCode());
+		stmt.setInt(2, purchase.getTranNo());
+		
 		stmt.executeUpdate();
 		
 		System.out.println("update 쿼리 날리기 완료 !");

@@ -38,11 +38,6 @@ public class PurchaseServiceImpl implements PurchaseService{
 	}
 
 	
-	public Map<String, Object> getSaleList(Search search) throws Exception {
-		return purchaseDao.getSaleList(search);
-	}
-
-	
 	public void updatePurchase(Purchase purchase) throws Exception {
 		purchaseDao.updatePurchase(purchase);
 		System.out.println("구매정보 수정완료");
@@ -54,7 +49,11 @@ public class PurchaseServiceImpl implements PurchaseService{
 		System.out.println("구매 상태 코드 수정완료");
 	}
 
-
+	/*
+	public Map<String, Object> getSaleList(Search search) throws Exception {
+		return purchaseDao.getSaleList(search);
+	}
+	*/
 
 	
 	

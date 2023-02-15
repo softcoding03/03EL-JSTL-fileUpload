@@ -160,16 +160,16 @@
 			<td align="left">${product.regDate}</td>		
 			<td></td>
 			<td align="left">
-			<c:if test="${empty tranCode}">
+			<c:if test="${empty product.proTranCode}">
 				판매중
 			</c:if>
-			<c:if test="${tranCode == '1'}">
-				구매완료  <a href="/updateTranCodeByProd.do?prodNo=${product.prodNo}&tranCode=${tranCode}">배송하기</a>
+			<c:if test="${product.proTranCode == '1'}">
+				구매완료  <a href="/updateTranCodeByProd.do?prodNo=${product.prodNo}&tranCode=2">배송하기</a>
 			</c:if>
-			<c:if test="${tranCode == '2'}">
+			<c:if test="${product.proTranCode == '2'}">
 				배송중
 			</c:if>
-			<c:if test="${tranCode == '3'}">
+			<c:if test="${product.proTranCode == '3'}">
 				배송완료
 			</c:if>
 			

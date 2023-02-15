@@ -75,19 +75,22 @@ public class ProductDao {
 		Map<String , Object>  map = new HashMap<String, Object>();
 		Connection con = DBUtil.getConnection();
 		
-		String sql = "select * from PRODUCT ";
+		String sql = "select p.*, t.tran_status_code FROM product p, transaction t";
 	
+		sql +=" where p.prod_no = t.prod_no(+)";
 		
 		if (search.getSearchCondition() != null) {
 			if ( search.getSearchCondition().equals("0") &&  !search.getSearchKeyword().equals("") ) {
-				sql += " WHERE PROD_NO = '" + search.getSearchKeyword()+"'";
+				sql += " AND PROD_NO = '" + search.getSearchKeyword()+"'";
 			} else if ( search.getSearchCondition().equals("1") && !search.getSearchKeyword().equals("")) {// 상품번호가 serchVO의 번호에 세팅되어있어야함
-				sql += " WHERE PROD_NAME LIKE '%" + search.getSearchKeyword()+"%'";
+				sql += " AND PROD_NAME LIKE '%" + search.getSearchKeyword()+"%'";
 			} else if ( search.getSearchCondition().equals("2") && !search.getSearchKeyword().equals("")) {// 상품명이 serchVO의 번호에 세팅되어있어야함
-				sql += " WHERE PRICE ='" + search.getSearchKeyword()+"'";//가격 가져옴
+				sql += " AND PRICE ='" + search.getSearchKeyword()+"'";//가격 가져옴
 			}
-		}
-		sql += " order by prod_no";     
+		} 
+			
+		
+		sql += " order by p.prod_no";     
 		
 		System.out.println("ProductDAO :: Original SQL :: " + sql);
 		//==> TotalCount GET
@@ -116,6 +119,7 @@ public class ProductDao {
 				vo.setPrice(rs.getInt("PRICE"));
 				vo.setFileName(rs.getString("IMAGE_FILE"));
 				vo.setRegDate(rs.getDate("REG_DATE"));
+				vo.setProTranCode(rs.getString("tran_status_code").trim());
 				list.add(vo);  //list에, select해온 정보들을 저장한 vo를 담는다.
 		}
 		
