@@ -75,7 +75,7 @@ public class ProductDao {
 		Map<String , Object>  map = new HashMap<String, Object>();
 		Connection con = DBUtil.getConnection();
 		
-		String sql = "select p.*, t.tran_status_code FROM product p, transaction t";
+		String sql = "select p.*, NVL(t.tran_status_code,'0') tran_status_code FROM product p, transaction t";
 	
 		sql +=" where p.prod_no = t.prod_no(+)";
 		
@@ -101,11 +101,9 @@ public class ProductDao {
 		sql = makeCurrentPageSql(sql, search); //ProductDao.makeCurrentPageSql 실행
 		
 		PreparedStatement stmt = con.prepareStatement(sql);
-		//TYPE_SCROLL_INSENSITIVE = rs.next()은 다음 row를 가져오고 이전의 데이터로 돌아가진 못한다. 커서가 지나간 자리에도 다시 돌아갈 수 있게 만들어줌.
-		//CONCUR_UPDATABLE result로 가져온 값을 updateable 할 수 있다.
 		ResultSet rs = stmt.executeQuery();
 
-		System.out.println(search);
+		System.out.println("search는 ??? = "+search);
 		
 		List<Product> list = new ArrayList<Product>();
 		
@@ -186,7 +184,7 @@ public class ProductDao {
 							" WHERE ROWNUM <="+search.getCurrentPage()*search.getPageSize()+" ) " +
 					"WHERE row_seq BETWEEN "+((search.getCurrentPage()-1)*search.getPageSize()+1) +" AND "+search.getCurrentPage()*search.getPageSize();
 		
-		System.out.println("UserDAO :: make SQL :: "+ sql);	
+		System.out.println("ProductDAO :: make SQL :: "+ sql);	
 		
 		return sql;
 	}

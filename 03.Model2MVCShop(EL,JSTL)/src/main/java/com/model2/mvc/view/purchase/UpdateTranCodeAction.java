@@ -25,12 +25,9 @@ public class UpdateTranCodeAction extends Action{
 		service.updateTranCode(purchase); 
 		
 		System.out.println("tranCode 변경완료");
+	
 		
-		// ListPurchaseAction.execute를 실행하며 listpurchase.jsp에서 필요한 값 세팅할 수 있도록 함..???
-		ListPurchaseAction listPurchaseAction = new ListPurchaseAction();
-		listPurchaseAction.execute(request, response);
-		
-		return "forward:/purchase/listPurchase.jsp";
+		return "forward:/listPurchase.do";
 		
 	}
 }

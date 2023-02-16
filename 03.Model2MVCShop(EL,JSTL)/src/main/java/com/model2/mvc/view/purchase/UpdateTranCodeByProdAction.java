@@ -12,8 +12,8 @@ import com.model2.mvc.service.purchase.impl.PurchaseServiceImpl;
 public class UpdateTranCodeByProdAction extends Action {
 	
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		int prodNo = Integer.parseInt(request.getParameter("prodNo"));
-		String tranCode = request.getParameter("tranCode");
+		int prodNo = Integer.parseInt(request.getParameter("prodNo")); //상품번호
+		String tranCode = request.getParameter("tranCode"); //2가 들어옴 2로 변경하라는 뜻(배송중)
 		System.out.println("prdNo와 tranCode는??? = "+prodNo+"와"+tranCode);
 		
 		Purchase purchase = new Purchase();
@@ -27,6 +27,6 @@ public class UpdateTranCodeByProdAction extends Action {
 		System.out.println("tranCode 변경완료");
 		
 		
-		return "forward:/product/listProductManage.jsp";	
+		return "forward:/listProduct.do?menu=manage";	
 	}
 }

@@ -150,27 +150,66 @@
 	<c:set var="i" value="0" />
 	<c:forEach var="product" items="${list}">
 		<c:set var="i" value="${ i+1 }" />
+		
 		<tr class="ct_list_pop">
 			<td align="center">${ i }</td>
 			<td></td>
-			<td align="left"><a href="/getProduct.do?prodNo=${product.prodNo}&menu=search">${product.prodName}</a></td>
+				<td align="left">
+				
+					<c:choose>
+					
+						<c:when test="${user.userId == 'admin'}">
+							${product.prodName}
+						</c:when>
+						
+						<c:otherwise>
+							<c:if test="${product.proTranCode != '0' }">
+								${product.prodName}
+							</c:if>
+							
+							<c:if test="${product.proTranCode == '0'}">
+								<a href="/getProduct.do?prodNo=${product.prodNo}&menu=search">${product.prodName}</a>
+							</c:if>
+						</c:otherwise>
+						
+					</c:choose>
+				
+				
+				<!--  
+					<c:if test="${user.userId == 'admin'}">
+					${product.prodName}
+					</c:if>	
+					
+					<c:if test="${user.userId != 'admin'}">
+						<c:if test="${product.proTranCode != '0' }">
+							${product.prodName}
+						</c:if>
+						
+						<c:if test="${product.proTranCode == '0'}">
+							<a href="/getProduct.do?prodNo=${product.prodNo}&menu=search">${product.prodName}</a>
+						</c:if>
+					</c:if>
+				-->
+				
+				</td>
 			<td></td>
 			<td align="left">${product.price}</td>
 			<td></td>
 			<td align="left">${product.regDate}</td>		
 			<td></td>
 			<td align="left">
-			<c:if test="${tranCode == '1'}">
+			<c:if test="${product.proTranCode == '0'}">
 				판매중
 			</c:if>
-			<c:if test="${tranCode == '3'}">
-				구매완료
+			<c:if test="${product.proTranCode != '0'}">
+				판매완료
 			</c:if>
 			</td>	
 		</tr>
 		<tr>
 		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
 		</tr>
+		
 	</c:forEach>
 </table>
 

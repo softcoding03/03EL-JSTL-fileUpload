@@ -153,14 +153,19 @@
 		<tr class="ct_list_pop">
 			<td align="center">${ i }</td>
 			<td></td>
-			<td align="left"><a href="/getProduct.do?prodNo=${product.prodNo}&menu=manage">${product.prodName}</a></td>
+			<c:if test="${user.userId == 'admin'}">
+				<td align="left">${product.prodName}</td>
+			</c:if>
+			<c:if test="${user.userId != 'admin'}">
+				<td align="left"><a href="/getProduct.do?prodNo=${product.prodNo}&menu=manage">${product.prodName}</a></td>
+			</c:if>
 			<td></td>
 			<td align="left">${product.price}</td>
 			<td></td>
 			<td align="left">${product.regDate}</td>		
 			<td></td>
 			<td align="left">
-			<c:if test="${empty product.proTranCode}">
+			<c:if test="${product.proTranCode == '0'}">
 				∆«∏≈¡ﬂ
 			</c:if>
 			<c:if test="${product.proTranCode == '1'}">

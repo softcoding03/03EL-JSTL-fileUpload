@@ -98,7 +98,6 @@ public class PurchaseDao {
 		stmt.setString(6, purchase.getDlvyAddr());
 		stmt.setString(7, purchase.getDlvyRequest());
 		stmt.setString(8, purchase.getTranCode());
-		//stmt.setString(9, purchase.getOrderDate());   sysdate
 		stmt.setString(9, purchase.getDlvyDate()); 
 		
 		System.out.println("insert쿼리날리기 완료 1");
@@ -194,18 +193,48 @@ public class PurchaseDao {
 	public void updateTranCode(Purchase purchase) throws Exception {
 		Connection con = DBUtil.getConnection();
 		
-		String sql = "update Transaction set tran_status_code=? where tran_NO=?";
+		//user가 접근 tranNo들어오면 tranNo로 검색 1쿼리
+		//admin에서 접근 prodNo들어오면 prodNo로 검색 2쿼리 getPurchaseProd().getProdNo() = => 배송완료로 전환
+		
+		String sql;
+		PreparedStatement stmt;
+		
+		if(purchase.getPurchaseProd() == null) {
+			
+		sql = "update Transaction set tran_status_code=? where tran_NO=?";
 		//tranCode String , tranNo int 세팅되어있음
 		
-		PreparedStatement stmt = con.prepareStatement(sql);
+		stmt = con.prepareStatement(sql);
 		
-		stmt.setString(1, purchase.getTranCode());
-		stmt.setInt(2, purchase.getTranNo());
+		stmt.setString(1, purchase.getTranCode()); //2대입
+		stmt.setInt(2, purchase.getTranNo()); //tranNo로 바로  조회
 		
 		stmt.executeUpdate();
 		
+		System.out.println("1???= "+purchase.getTranCode());
+		System.out.println("2???= "+purchase.getTranNo());
+		System.out.println("updateTranCode sql은 ? = "+sql);
 		System.out.println("update 쿼리 날리기 완료 !");
 		
+		
+		} else {
+		
+			sql = "update Transaction set tran_status_code=? where prod_no=?";
+			
+			stmt = con.prepareStatement(sql);
+			
+			stmt.setString(1, purchase.getTranCode()); //'2' 대입
+			stmt.setInt(2, purchase.getPurchaseProd().getProdNo()); //상품번호로 조회
+			
+			stmt.executeUpdate();
+			
+			System.out.println("1???= "+purchase.getTranCode());
+			System.out.println("2???= "+purchase.getPurchaseProd().getProdNo());
+			System.out.println("updateTranCode sql은 ? = "+sql);
+			System.out.println("update 쿼리 날리기 완료 !");
+			
+			
+		}
 		stmt.close();
 		con.close();
 	}
