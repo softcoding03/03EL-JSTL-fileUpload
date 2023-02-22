@@ -23,7 +23,7 @@ public class AddPurchaseViewAction extends Action {
 		
 
 		//쿼리스트링에서 prodNo 가져오기
-		int prodNo = Integer.parseInt(request.getParameter("prod_no"));
+		int prodNo = Integer.parseInt(request.getParameter("prodNo"));
 			System.out.println("prodNo는 ?"+prodNo);
 		
 		//Session에 저장된 user 정보들 가져오기(userId기반으로 정보 저장해둠)
