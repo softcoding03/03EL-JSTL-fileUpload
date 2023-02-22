@@ -168,7 +168,7 @@
 							</c:if>
 							
 							<c:if test="${product.proTranCode == '0'}">
-								<a href="/getProduct.do?prodNo=${product.prodNo}&menu=search">${product.prodName}</a>
+								<a href="/getProduct.do?prodNo=${product.prodNo}">${product.prodName}</a>
 							</c:if>
 						</c:otherwise>
 						

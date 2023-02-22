@@ -1,22 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-<%@ page import="java.util.*"  %>
-<%@ page import="com.model2.mvc.service.domain.*" %>
-<%@ page import="com.model2.mvc.common.Search" %>
-<%@page import="com.model2.mvc.common.Page"%>
-<%@page import="com.model2.mvc.common.util.CommonUtil"%>
 
-<%
-	List<Product> list= (List<Product>)request.getAttribute("list");
-	Page resultPage=(Page)request.getAttribute("resultPage");
-	Search search=(Search)request.getAttribute("search");
-	//==> null 을 ""(nullString)으로 변경
-	String searchCondition = CommonUtil.null2str(search.getSearchCondition());
-	String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
-%>
---%>
 
 <html>
 <head>
@@ -37,7 +22,6 @@
 
 <div style="width:98%; margin-left:10px;">
 
-<%-- <form name="detailForm" action="/listProduct.do?menu=manage&searchCondition=<%=searchCondition%>&searchKeyword=<%=searchKeyword%>" method="post">--%>
 <form name="detailForm" action="/listProduct.do?menu=manage" method="post">
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -66,11 +50,7 @@
 	<tr>
 		<td align="right">
 			<select name="searchCondition" class="ct_input_g" style="width:80px">
-			<%--
-				<option value="0" <%= (searchCondition.equals("0") ? "selected" : "")%>>상품번호</option>
-				<option value="1" <%= (searchCondition.equals("1") ? "selected" : "")%>>상품명</option>
-				<option value="2" <%= (searchCondition.equals("2") ? "selected" : "")%>>상품가격</option>
-			--%>
+
 				<option value="0"  ${ ! empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>상품번호</option>
 				<option value="1"  ${ ! empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>상품명</option>
 				<option value="2"  ${ ! empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>상품가격</option>	
@@ -153,12 +133,7 @@
 		<tr class="ct_list_pop">
 			<td align="center">${ i }</td>
 			<td></td>
-			<c:if test="${user.userId == 'admin'}">
-				<td align="left">${product.prodName}</td>
-			</c:if>
-			<c:if test="${user.userId != 'admin'}">
-				<td align="left"><a href="/getProduct.do?prodNo=${product.prodNo}&menu=manage">${product.prodName}</a></td>
-			</c:if>
+			<td align="left"><a href="/getProduct.do?prodNo=${product.prodNo}&menu=manage">${product.prodName}</a></td>
 			<td></td>
 			<td align="left">${product.price}</td>
 			<td></td>
@@ -190,24 +165,7 @@
 	<tr>
 		<td align="center">
 		<input type="hidden" id="currentPage" name="currentPage" value=""/>
-		<%-- 
-			<% if( resultPage.getCurrentPage() <= resultPage.getPageUnit() ){ %>
-					◀ 이전
-			<% }else{ %>
-					<a href="javascript:fncGetProductList('<%=resultPage.getCurrentPage()-1%>')">◀ 이전</a>
-			<% } %>
 
-			<%	for(int i=resultPage.getBeginUnitPage();i<= resultPage.getEndUnitPage() ;i++){	%>
-					<a href="javascript:fncGetProductList('<%=i %>');"><%=i %></a>
-			<% 	}  %>
-	
-			<% if( resultPage.getEndUnitPage() >= resultPage.getMaxPage() ){ %>
-					이후 ▶
-			<% }else{ %>
-					<a href="javascript:fncGetProductList('<%=resultPage.getEndUnitPage()+1%>')">이후 ▶</a>
-			<%} %>
-    	--%>
-    <%-- 			<jsp:include page="../common/pageNavigator.jsp"/>   --%>
     			<c:import var="page" url="../common/pageNavigator.jsp">
     				<c:param name="name" value="product"/>
     			</c:import>

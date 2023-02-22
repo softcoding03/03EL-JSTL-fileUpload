@@ -16,7 +16,7 @@ public class UpdateProductViewAction extends Action{
 	@Override
 	public String execute(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		
-		int prodNo = Integer.parseInt(request.getParameter("prod_no"));
+		int prodNo = Integer.parseInt(request.getParameter("prodNo"));
 		//url에 담아준 prodNo를 가져와서 사용한다. 
 		System.out.println("성공 ~~"+prodNo);
 		

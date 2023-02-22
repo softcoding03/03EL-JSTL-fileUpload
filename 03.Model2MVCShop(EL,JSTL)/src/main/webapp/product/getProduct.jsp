@@ -105,15 +105,15 @@
 				<td width="17" height="23">
 					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 				</td>
-				<c:if test="${param.menu == 'search'}">
+				<c:if test="${user.userId != 'admin'}">
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-					<a href="/addPurchaseView.do?prod_no=${getVO.prodNo}">구매</a>
+					<a href="/addPurchaseView.do?prodNo=${getVO.prodNo}">구매</a>
 				</td>
 				</c:if>
 				
-				<c:if test="${param.menu == 'manage'}">
+				<c:if test="${user.userId == 'admin'}">
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-						<a href="/updateProductView.do?prod_no=${getVO.prodNo}">수정</a>
+						<a href="/updateProductView.do?prodNo=${getVO.prodNo}">수정</a>
 					</td>
 				</c:if>
 				
