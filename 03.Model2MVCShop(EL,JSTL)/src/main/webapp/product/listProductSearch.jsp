@@ -173,24 +173,7 @@
 						</c:otherwise>
 						
 					</c:choose>
-				
-				
-				<!--  
-					<c:if test="${user.userId == 'admin'}">
-					${product.prodName}
-					</c:if>	
-					
-					<c:if test="${user.userId != 'admin'}">
-						<c:if test="${product.proTranCode != '0' }">
-							${product.prodName}
-						</c:if>
-						
-						<c:if test="${product.proTranCode == '0'}">
-							<a href="/getProduct.do?prodNo=${product.prodNo}&menu=search">${product.prodName}</a>
-						</c:if>
-					</c:if>
-				-->
-				
+	
 				</td>
 			<td></td>
 			<td align="left">${product.price}</td>
